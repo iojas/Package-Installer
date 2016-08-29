@@ -49,16 +49,51 @@ namespace ConsoleApplication1
             {
                 independent.Remove(x);
             }
-            Console.WriteLine("Independents");
-            foreach (string x in independent)
+
+            //We will need total number of individual packages in order to detect if cycle is present or not.
+            int totalPackages = dependent.Count + independent.Count;
+
+            //Use count for detecting if cycle is present or not.
+            int count = 0;
+            //Create a stackk of Independent Packages
+            Stack<string> indStack = new Stack<string>(independent);
+            // LinkedList of independent packages for printing purpose.
+            LinkedList<String> ret = new LinkedList<string>(independent);
+            //while stack is not empty
+            while (indStack.Count > 0)
             {
-                Console.WriteLine(x);
+                //get the top element of stack
+                string key = indStack.Pop();
+                //compare it with each entry in dictionary
+                foreach (KeyValuePair<string, string> entry in dict)
+                {
+                    // If Entry is matched push it on the stack, as it is nt dependent on any other dependent now.
+                    if (entry.Value.Equals(key))
+                    {
+                        indStack.Push(entry.Key);
+                        ret.AddLast(entry.Key);
+                        //increament the count for each new independent variable
+                        count++; 
+                    }
+
+                }
             }
-            Console.WriteLine();
-            Console.WriteLine("Dependents");
-            foreach (string x in dependent)
+            //count signifies total number of dependent packages that we were able to use once their dependency was resolved
+            // when we add it with count of independent packages we get total count of installable packages.  
+            int a = count + independent.Count;
+            
+            //if the total count of installable pacckages is equal to count of total packages then print it one by one.
+            if (a == totalPackages)
             {
-                Console.WriteLine(x);
+                foreach (string s in ret)
+                {
+                    Console.WriteLine(s);
+                }
+            }
+            //if count is not equal then there must be cycles present.
+            else
+            {
+                Console.WriteLine("There are cycles.");
             }
 
             Console.ReadLine();
