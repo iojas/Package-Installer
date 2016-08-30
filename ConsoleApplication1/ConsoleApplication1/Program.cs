@@ -8,6 +8,29 @@ namespace ConsoleApplication1
 {
     class Program
     {
+        //function for removing leading and trailing blank spaces and double inverted comma from package name.
+        public static string cleanIt(string package)
+        {
+            string returnVal = "";
+            string pack = package.Trim();
+
+            if (pack.Equals('"'))
+            {
+                return string.Empty;
+            }
+            else
+            {
+                if (package[0].Equals('"'))
+                {
+                    return package.Remove(0, 1).Trim();
+                }
+                else if (package[package.Count() - 1].Equals('"'))
+                {
+                    return package.Remove(package.Count() - 1, 1).Trim();
+                }
+            }
+            return returnVal;
+        }
 
         static void Main(string[] args)
         {
@@ -27,21 +50,21 @@ namespace ConsoleApplication1
                 {
                     String[] packinList = s.Split(':');
                     //remove white  leading and trailing spaces and double inverted comma (") from all package names.  
-                    if (!packinList[1].Trim().Remove(0, 1).Equals(string.Empty))
+                    if (!cleanIt(packinList[1]).Equals(string.Empty))
                     {
 
-                        dependent.Add(packinList[0].Remove(0, 1).Trim());
-                        independent.Add(packinList[1].Trim().Remove(packinList[1].Trim().Count() - 1, 1));
-                        dict.Add(packinList[0].Remove(0, 1).Trim(), packinList[1].Trim().Remove(packinList[1].Trim().Count() - 1, 1));
+                        dependent.Add(cleanIt(packinList[0]));
+                        independent.Add(cleanIt(packinList[1]));
+                        dict.Add(cleanIt(packinList[0]), cleanIt(packinList[1]));
                     }
                     else
                     {
-                        if (!packinList[1].Trim().Remove(packinList[1].Trim().Count() - 1, 1).Equals(string.Empty))
+                        if (!cleanIt(packinList[1]).Equals(string.Empty))
                         {
-                            independent.Add(packinList[1].Trim().Remove(packinList[1].Trim().Count() - 1, 1));
+                            independent.Add(cleanIt(packinList[1]));
                         }
                     }
-                    
+
                 }
             }
             catch
@@ -89,15 +112,25 @@ namespace ConsoleApplication1
             //if the total count of installable pacckages is equal to count of total packages then print it one by one.
             if (a == totalPackages)
             {
+                int comma = 0;
                 foreach (string s in ret)
                 {
-                    Console.WriteLine(s);
+                    if (comma == 0)
+                    {
+                        Console.Write(s);
+                        comma++;
+                    }
+                    else
+                    {
+                        Console.Write(", " + s);
+                    }
+                    
                 }
             }
             //if count is not equal then there must be cycles present.
             else
             {
-                Console.WriteLine("There are cycles.");
+                Console.WriteLine("Cycle Detected.");
             }
 
             Console.ReadLine();
