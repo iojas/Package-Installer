@@ -1,7 +1,8 @@
 # Package-Installer
 Coding exercise
 
-A package installer that can handle dependencies. Given a list of packages with dependencies it gives back packages in order such that an install won’t fail due to a missing dependency.
+A package installer that can handle dependencies. Given a list of packages with dependencies it gives back packages in order such that an 
+install won’t fail due to a missing dependency.
 
 
 
