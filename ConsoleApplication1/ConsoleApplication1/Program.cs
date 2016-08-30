@@ -21,29 +21,34 @@ namespace ConsoleApplication1
             //contains packages on Right hand side. (Later they will be refined)
             HashSet<string> dependent = new HashSet<string>();
             HashSet<string> independent = new HashSet<string>();
-
-            foreach (String s in givenArray)
+            try
             {
-                String[] packinList = s.Split(':');
-                //remove white  leading and trailing spaces and double inverted comma (") from all package names.  
-                if (!packinList[1].Trim().Remove(0, 1).Equals(string.Empty))
+                foreach (String s in givenArray)
                 {
-            
-                    dependent.Add(packinList[0].Remove(0, 1).Trim());
-                    independent.Add(packinList[1].Trim().Remove(packinList[1].Trim().Count() - 1, 1));
-                    dict.Add(packinList[0].Remove(0, 1).Trim(), packinList[1].Trim().Remove(packinList[1].Trim().Count() - 1, 1));
-                }
-                else
-                {
-                    if (!packinList[1].Trim().Remove(packinList[1].Trim().Count() - 1, 1).Equals(string.Empty))
+                    String[] packinList = s.Split(':');
+                    //remove white  leading and trailing spaces and double inverted comma (") from all package names.  
+                    if (!packinList[1].Trim().Remove(0, 1).Equals(string.Empty))
                     {
+
+                        dependent.Add(packinList[0].Remove(0, 1).Trim());
                         independent.Add(packinList[1].Trim().Remove(packinList[1].Trim().Count() - 1, 1));
+                        dict.Add(packinList[0].Remove(0, 1).Trim(), packinList[1].Trim().Remove(packinList[1].Trim().Count() - 1, 1));
                     }
+                    else
+                    {
+                        if (!packinList[1].Trim().Remove(packinList[1].Trim().Count() - 1, 1).Equals(string.Empty))
+                        {
+                            independent.Add(packinList[1].Trim().Remove(packinList[1].Trim().Count() - 1, 1));
+                        }
+                    }
+                    
                 }
-
-                
-
             }
+            catch
+            {
+                Console.WriteLine("Invalid Input");
+            }
+
             foreach (string x in dependent)
             {
                 independent.Remove(x);
