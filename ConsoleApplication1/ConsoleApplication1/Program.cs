@@ -8,41 +8,40 @@ namespace ConsoleApplication1
 {
     class Program
     {
+
         static void Main(string[] args)
         {
-            // Input should be given here.
-            String[] givenArray = { "KittenService: ",
-
-"Leetmeme: Cyberportal",
-
-"Cyberportal: Ice",
-
-"CamelCaser: KittenService",
-
-"Fraudstream: Leetmeme",
-
-"Ice: " };
-
-            Dictionary<string, string> dict = new Dictionary<string, string>();
+            Console.WriteLine("Please Enter Array of packages");
+            String ss = Console.ReadLine();
             
-            // dependent are those who are on the Left side of each dependency, independent on right side. 
+            string[] givenArray = ss.Split(',');
+            
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            //Create two Hashsets dependent and independent. dependent ccontains all the packages on the left hand side of ':' while independent
+            //contains packages on Right hand side. (Later they will be refined)
             HashSet<string> dependent = new HashSet<string>();
             HashSet<string> independent = new HashSet<string>();
 
             foreach (String s in givenArray)
             {
                 String[] packinList = s.Split(':');
-                if (!packinList[1].Trim().Equals(string.Empty))
+                //remove white  leading and trailing spaces and double inverted comma (") from all package names.  
+                if (!packinList[1].Trim().Remove(0, 1).Equals(string.Empty))
                 {
-                    // Before adding to dicctionary remove the white spaces.
-                    independent.Add(packinList[1].Trim());
-                    dependent.Add(packinList[0].Trim());
-                    dict.Add(packinList[0].Trim(), packinList[1].Trim());
+            
+                    dependent.Add(packinList[0].Remove(0, 1).Trim());
+                    independent.Add(packinList[1].Trim().Remove(packinList[1].Trim().Count() - 1, 1));
+                    dict.Add(packinList[0].Remove(0, 1).Trim(), packinList[1].Trim().Remove(packinList[1].Trim().Count() - 1, 1));
                 }
                 else
                 {
-                    independent.Add(packinList[0].Trim());
+                    if (!packinList[1].Trim().Remove(packinList[1].Trim().Count() - 1, 1).Equals(string.Empty))
+                    {
+                        independent.Add(packinList[1].Trim().Remove(packinList[1].Trim().Count() - 1, 1));
+                    }
                 }
+
+                
 
             }
             foreach (string x in dependent)
